@@ -5,11 +5,10 @@ import axios from 'axios';
 import cron from 'node-cron';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, URL } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const __basename = path.basename(__filename);
 
 const apiUrl =
     'https://api.raccoonlagoon.com/v1/server-info?ip=104.153.104.12:27015&g=tf2';
