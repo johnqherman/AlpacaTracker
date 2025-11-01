@@ -14,7 +14,7 @@ const __basename = path.basename(__filename);
 const apiUrl =
     'https://api.raccoonlagoon.com/v1/server-info?ip=104.153.104.12:27015&g=tf2';
 
-class TF2ServerMonitor {
+class AlpacaTracker {
     constructor() {
         this.config = {
             apiUrl: apiUrl,
@@ -401,9 +401,7 @@ class TF2ServerMonitor {
     }
 }
 
-if (process.argv[1] === __filename || process.argv[1]?.endsWith(__basename)) {
-    const monitor = new TF2ServerMonitor();
-    monitor.start();
-}
+const monitor = new AlpacaTracker();
+monitor.start();
 
-export default TF2ServerMonitor;
+export default AlpacaTracker;
