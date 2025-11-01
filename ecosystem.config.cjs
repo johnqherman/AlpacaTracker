@@ -2,7 +2,7 @@ module.exports = {
     apps: [
         {
             name: 'alpaca-tracker',
-            script: 'src/monitor.js',
+            script: 'src/tracker.js',
             instances: 1,
             autorestart: true,
             watch: false,
