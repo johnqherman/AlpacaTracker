@@ -25,7 +25,7 @@ jobs:
                   passphrase: ${{ secrets.SSH_PASSPHRASE }}
                   port: 22
                   script: |
-                      cd /var/www/tf2-monitor
+                      cd /var/www/AlpacaTracker
                       git pull origin master
                       npm ci --production
                       pm2 reload ecosystem.config.js --env production || pm2 start ecosystem.config.js --env production

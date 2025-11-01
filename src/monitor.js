@@ -1,11 +1,14 @@
 #!/usr/bin/env node
 
-require('dotenv').config();
+import 'dotenv/config';
+import axios from 'axios';
+import cron from 'node-cron';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-const axios = require('axios');
-const cron = require('node-cron');
-const fs = require('fs');
-const path = require('path');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 const apiUrl =
     'https://api.raccoonlagoon.com/v1/server-info?ip=104.153.104.12:27015&g=tf2';
 
@@ -178,7 +181,6 @@ class TF2ServerMonitor {
 
     maskWebhookUrl(url) {
         try {
-            const { URL } = require('url');
             const urlObj = new URL(url);
             const parts = urlObj.pathname.split('/');
             if (parts.length >= 5) {
@@ -397,9 +399,9 @@ class TF2ServerMonitor {
     }
 }
 
-if (require.main === module) {
+if (import.meta.url === `file://${process.argv[1]}`) {
     const monitor = new TF2ServerMonitor();
     monitor.start();
 }
 
-module.exports = TF2ServerMonitor;
+export default TF2ServerMonitor;
