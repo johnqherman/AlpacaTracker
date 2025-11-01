@@ -1,0 +1,45 @@
+name: Deploy
+
+on:
+    push:
+        branches: [master]
+
+jobs:
+    deploy:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v4
+
+            - uses: actions/setup-node@v4
+              with:
+                  node-version: '18'
+                  cache: 'npm'
+
+            - run: npm ci
+
+            - uses: appleboy/ssh-action@v1.0.3
+              with:
+                  host: ${{ secrets.VPS_HOST }}
+                  username: ${{ secrets.VPS_USER }}
+                  key: ${{ secrets.VPS_SSH_KEY }}
+                  port: 22
+                  script: |
+                      cd /var/www/tf2-monitor
+                      git pull origin master
+                      npm ci --production
+                      pm2 reload ecosystem.config.js --env production || pm2 start ecosystem.config.js --env production
+                      pm2 save
+
+            - if: ${{ success() }}
+              run: |
+                  curl -X POST \
+                    -H "Content-Type: application/json" \
+                    -d '{"status": "success", "message": "Deploy success on master"}' \
+                    ${{ secrets.DEPLOY_WEBHOOK_URL }}
+
+            - if: ${{ failure() }}
+              run: |
+                  curl -X POST \
+                    -H "Content-Type: application/json" \
+                    -d '{"status": "failure", "message": "Deploy failure on master"}' \
+                    ${{ secrets.DEPLOY_WEBHOOK_URL }}
