@@ -9,6 +9,8 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const __basename = path.basename(__filename);
+
 const apiUrl =
     'https://api.raccoonlagoon.com/v1/server-info?ip=104.153.104.12:27015&g=tf2';
 
@@ -399,7 +401,7 @@ class TF2ServerMonitor {
     }
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (process.argv[1] === __filename || process.argv[1]?.endsWith(__basename)) {
     const monitor = new TF2ServerMonitor();
     monitor.start();
 }
