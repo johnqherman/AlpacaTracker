@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { sleep } from '../utils/utils.js';
 
 class ServerFetcher {
     constructor(config) {
@@ -6,10 +7,6 @@ class ServerFetcher {
         this.maxRetries = config.maxRetries;
         this.retryDelay = config.retryDelay;
         this.consecutiveErrors = 0;
-    }
-
-    sleep(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     async fetchServerInfo(retryCount = 0) {
@@ -30,7 +27,7 @@ class ServerFetcher {
 
             if (retryCount < this.maxRetries) {
                 console.log(`Retrying in ${this.retryDelay / 1000}s...`);
-                await this.sleep(this.retryDelay);
+                await sleep(this.retryDelay);
                 return this.fetchServerInfo(retryCount + 1);
             }
 
