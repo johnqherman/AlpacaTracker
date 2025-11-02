@@ -17,7 +17,9 @@ const __dirname = path.dirname(__filename);
 class AlpacaTracker {
     constructor() {
         this.config = new Config();
-        this.messageStorage = new MessageStorage(path.join(__dirname, 'message-ids.json'));
+        this.messageStorage = new MessageStorage(
+            path.join(__dirname, 'message-ids.json')
+        );
         this.webhookClient = new WebhookClient(this.messageStorage);
         this.embedBuilder = new EmbedBuilder();
         this.serverFetcher = new ServerFetcher(this.config);
@@ -50,10 +52,9 @@ class AlpacaTracker {
         const playerCount = serverData.numHumans || 0;
         const maxPlayers = serverData.maxClients || 24;
         const capacityPercent = Math.round((playerCount / maxPlayers) * 100);
-        const botCount = serverData.numBots || 0;
 
         console.log(
-            `Server status: ${playerCount}/${maxPlayers} players (${capacityPercent}%)${botCount > 0 ? `, ${botCount} bots` : ''}`
+            `Server status: ${playerCount}/${maxPlayers} players (${capacityPercent}%)`
         );
 
         const embed = this.embedBuilder.createServerEmbed(

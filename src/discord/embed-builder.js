@@ -28,7 +28,6 @@ class EmbedBuilder {
         const playerCount = serverData.numHumans || 0;
         const maxPlayers = serverData.maxClients || 24;
         const serverIP = serverData.serverIP || 'Unknown';
-        const botCount = serverData.numBots || 0;
         const capacityPercent = Math.round((playerCount / maxPlayers) * 100);
 
         const progressBarLength = 40;
@@ -56,14 +55,6 @@ class EmbedBuilder {
                     'https://raw.githubusercontent.com/JohnQHerman/fast-dl/main/images/raccoon_lagoon.png'
             }
         };
-
-        if (botCount > 0) {
-            embed.fields.push({
-                name: 'Bots',
-                value: `${botCount} bot${botCount !== 1 ? 's' : ''} online`,
-                inline: true
-            });
-        }
 
         const players =
             serverData.humanData?.filter?.(p => p.name?.trim()) || [];
