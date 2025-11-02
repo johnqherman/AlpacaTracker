@@ -24,7 +24,7 @@ class WebhookClient {
             const urlObj = new URL(url);
             const parts = urlObj.pathname.split('/');
             if (parts.length >= 5) {
-                parts[4] = parts[4].substring(0, 4) + '***';
+                parts[4] = `${parts[4].substring(0, 4)}***`;
                 parts[5] = '***';
                 urlObj.pathname = parts.join('/');
             }
