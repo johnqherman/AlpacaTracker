@@ -57,10 +57,7 @@ class AlpacaTracker {
             `Server status: ${playerCount}/${maxPlayers} players (${capacityPercent}%)`
         );
 
-        const embed = this.embedBuilder.createServerEmbed(
-            serverData,
-            this.config.pollInterval
-        );
+        const embed = this.embedBuilder.createServerEmbed(serverData);
 
         const success = await this.webhookClient.sendDiscordNotification(
             this.config.webhookUrls,

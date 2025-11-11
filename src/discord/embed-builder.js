@@ -15,16 +15,11 @@ class EmbedBuilder {
         return parts.join(' ');
     }
 
-    getNextRefreshTimestamp(pollInterval) {
-        const cronParts = pollInterval.split(' ');
-        const intervalMinutes = cronParts[0].startsWith('*/')
-            ? parseInt(cronParts[0].substring(2)) || 3
-            : 3;
-
-        return Math.floor((Date.now() + intervalMinutes * 60 * 1000) / 1000);
+    getNextRefreshTimestamp() {
+        return Math.floor((Date.now() + 60 * 1000) / 1000);
     }
 
-    createServerEmbed(serverData, pollInterval) {
+    createServerEmbed(serverData) {
         const playerCount = serverData.numHumans || 0;
         const maxPlayers = serverData.maxClients || 24;
         const serverIP = serverData.serverIP || 'Unknown';
@@ -44,7 +39,7 @@ class EmbedBuilder {
                 { name: '', value: progressBar, inline: false },
                 {
                     name: 'Online Players',
-                    value: `**${playerCount}/${maxPlayers}** (${capacityPercent}%) - Refreshing <t:${this.getNextRefreshTimestamp(pollInterval)}:R>\n[Join Now](https://raccoonlagoon.com/connect/${serverIP})`,
+                    value: `**${playerCount}/${maxPlayers}** (${capacityPercent}%) - Refreshing <t:${this.getNextRefreshTimestamp()}:R>\n[Join Now](https://raccoonlagoon.com/connect/${serverIP})`,
                     inline: false
                 }
             ],
