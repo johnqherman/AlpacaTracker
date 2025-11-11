@@ -52,7 +52,7 @@ class EmbedBuilder {
             footer: {
                 text: 'api.raccoonlagoon.com',
                 icon_url:
-                    'https://raw.githubusercontent.com/JohnQHerman/fast-dl/main/images/raccoon_lagoon.png'
+                    'https://static.raccoonlagoon.com/images/raccoon_lagoon.png'
             }
         };
 
