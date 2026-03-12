@@ -53,10 +53,18 @@ class WebhookClient {
                         `Message updated: ${this.maskWebhookUrl(webhookUrl)}`
                     );
                     return true;
-                } catch {
-                    this.lastMessageIds.delete(webhookUrl);
-                    if (this.messageStorage) {
-                        this.messageStorage.deleteMessageId(webhookUrl);
+                } catch (error) {
+                    const status = error?.response?.status;
+                    if (status === 404) {
+                        this.lastMessageIds.delete(webhookUrl);
+                        if (this.messageStorage) {
+                            this.messageStorage.deleteMessageId(webhookUrl);
+                        }
+                    } else {
+                        console.warn(
+                            `PATCH failed (${status ?? error.message}), will retry next cycle: ${this.maskWebhookUrl(webhookUrl)}`
+                        );
+                        return true;
                     }
                 }
             }
