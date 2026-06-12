@@ -10,13 +10,6 @@ jobs:
         steps:
             - uses: actions/checkout@v4
 
-            - uses: actions/setup-node@v4
-              with:
-                  node-version: '18'
-                  cache: 'npm'
-
-            - run: npm ci
-
             - uses: appleboy/ssh-action@v1.0.3
               with:
                   host: ${{ secrets.VPS_HOST }}
@@ -27,9 +20,8 @@ jobs:
                   script: |
                       cd /var/www/AlpacaTracker
                       git pull origin master
-                      npm ci --production
-                      pm2 reload ecosystem.config.cjs --env production || pm2 start ecosystem.config.cjs --env production
-                      pm2 save
+                      docker compose up -d --build
+                      docker image prune -f
 
             - if: ${{ success() }}
               run: |
