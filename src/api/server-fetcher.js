@@ -7,6 +7,8 @@ class ServerFetcher {
         this.maxRetries = config.maxRetries;
         this.retryDelay = config.retryDelay;
         this.consecutiveErrors = 0;
+        this.firstErrorAt = null;
+        this.lastSuccessAt = null;
     }
 
     async fetchServerInfo(retryCount = 0) {
@@ -21,6 +23,8 @@ class ServerFetcher {
             });
 
             this.consecutiveErrors = 0;
+            this.firstErrorAt = null;
+            this.lastSuccessAt = Date.now();
             return data;
         } catch (error) {
             console.error(`Failed to fetch server info: ${error.message}`);
@@ -32,12 +36,21 @@ class ServerFetcher {
             }
 
             this.consecutiveErrors++;
+            if (!this.firstErrorAt) this.firstErrorAt = Date.now();
             throw error;
         }
     }
 
     getConsecutiveErrors() {
         return this.consecutiveErrors;
+    }
+
+    getDownSince() {
+        return this.firstErrorAt;
+    }
+
+    getLastSuccessAt() {
+        return this.lastSuccessAt;
     }
 }
 

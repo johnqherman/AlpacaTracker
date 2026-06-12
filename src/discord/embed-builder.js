@@ -89,25 +89,46 @@ class EmbedBuilder {
         return embed;
     }
 
-    createErrorEmbed(error, consecutiveErrors) {
-        return {
-            title: '⚠️ Error',
-            description: `Failed to fetch server information after ${consecutiveErrors} consecutive attempts.`,
+    formatDowntime(seconds) {
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const remainingSeconds = seconds % 60;
+
+        const parts = [];
+        if (hours > 0) parts.push(`${hours} hour${hours === 1 ? '' : 's'}`);
+        if (minutes > 0)
+            parts.push(`${minutes} minute${minutes === 1 ? '' : 's'}`);
+        if (remainingSeconds > 0 || parts.length === 0)
+            parts.push(
+                `${remainingSeconds} second${remainingSeconds === 1 ? '' : 's'}`
+            );
+
+        return new Intl.ListFormat('en', {
+            style: 'long',
+            type: 'conjunction'
+        }).format(parts);
+    }
+
+    createErrorEmbed(downSince, lastSuccessAt) {
+        const downtimeSeconds = Math.floor((Date.now() - downSince) / 1000);
+
+        const embed = {
+            title: '🔴 Server Down',
+            description: `The server has been down for **${this.formatDowntime(downtimeSeconds)}**.`,
             color: 0xff0000,
-            fields: [
-                {
-                    name: '❌ Error Details',
-                    value: error.message.substring(0, 1000),
-                    inline: false
-                },
-                {
-                    name: '🔄 Status',
-                    value: 'Monitoring will continue automatically',
-                    inline: false
-                }
-            ],
+            fields: [],
             timestamp: new Date().toISOString()
         };
+
+        if (lastSuccessAt) {
+            embed.fields.push({
+                name: 'Last Seen',
+                value: `<t:${Math.floor(lastSuccessAt / 1000)}:R>`,
+                inline: false
+            });
+        }
+
+        return embed;
     }
 }
 

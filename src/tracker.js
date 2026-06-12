@@ -34,10 +34,10 @@ class AlpacaTracker {
         );
     }
 
-    async sendErrorNotification(error) {
+    async sendErrorNotification() {
         const embed = this.embedBuilder.createErrorEmbed(
-            error,
-            this.serverFetcher.getConsecutiveErrors()
+            this.serverFetcher.getDownSince(),
+            this.serverFetcher.getLastSuccessAt()
         );
 
         await this.webhookClient.sendDiscordNotification(
@@ -89,7 +89,7 @@ class AlpacaTracker {
         } catch (error) {
             console.error(`Server check failed: ${error.message}`);
             if (this.serverFetcher.getConsecutiveErrors() >= 3) {
-                await this.sendErrorNotification(error);
+                await this.sendErrorNotification();
             }
         } finally {
             this.isRunning = false;
